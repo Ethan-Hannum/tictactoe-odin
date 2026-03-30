@@ -2,10 +2,11 @@ function createUser(xOrO) {
     const marker = xOrO;
     const score = 0;
 
+    const getMarker = () => marker;
     const getScore = () => score;
     const addScore = () => { score++ };
 
-    return {marker, score};
+    return {getScore, addScore, getMarker};
 };
 
 const player1 = createUser("X");
