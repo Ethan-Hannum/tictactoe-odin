@@ -15,6 +15,7 @@ const player2 = createUser("O");
 const gameBoard = (() => {
     const boardArr = [null, null, null, null, null, null, null, null, null];
     console.log(boardArr);
+    const {getMarker} = createUser();
 
     const placeMarker = (marker, item) => {
         boardArr[item] = `${marker}`;
@@ -22,24 +23,65 @@ const gameBoard = (() => {
     }
 
     const checkWinner = (marker) => {
-        if ((board[0] == marker) && (board[1] == marker) && (board[2] === marker)) {
+        if ((boardArr[0] == marker) && (boardArr[1] == marker) && (boardArr[2] == marker)) {
             console.log("Someone won at 0, 1 and 2");
-        } else if ((board[3] == marker) && (board[4] == marker) && (board[5] == marker)) {
+            ++gameStatus;
+        } else if ((boardArr[3] == marker) && (boardArr[4] == marker) && (boardArr[5] == marker)) {
             console.log("Someone won at 3, 4 and 5");
-        } else if ((board[6] == marker) && (board[7] == marker) && (board[8] == marker)) {
+            ++gameStatus;
+        } else if ((boardArr[6] == marker) && (boardArr[7] == marker) && (boardArr[8] == marker)) {
             console.log("Someone won at 6, 7 and 8");
-        } else if ((board[0] == marker) && (board[3] == marker) && (board[6] == marker)) {
+            ++gameStatus;
+        } else if ((boardArr[0] == marker) && (boardArr[3] == marker) && (boardArr[6] == marker)) {
             console.log("Someone won at 0, 3 and 6");
-        } else if ((board[1] == marker) && (board[4] == marker) && (board[7] == marker)) {
+            ++gameStatus;
+        } else if ((boardArr[1] == marker) && (boardArr[4] == marker) && (boardArr[7] == marker)) {
             console.log("Someone won at 1, 4 and 7");
-        } else if ((board[2] == marker) && (board[5] == marker) && (board[8] == marker)) {
+            ++gameStatus;
+        } else if ((boardArr[2] == marker) && (boardArr[5] == marker) && (boardArr[8] == marker)) {
             console.log("Someone won at 2, 5 and 8");
-        } else if ((board[0] == marker) && (board[4] == marker) && (board[8] == marker)) {
+            ++gameStatus;
+        } else if ((boardArr[0] == marker) && (boardArr[4] == marker) && (boardArr[8] == marker)) {
             console.log("Someone won at 0, 4 and 8");
-        } else if ((board[2] == marker) && (board[4] == marker) && (board[6] == marker)) {
+            ++gameStatus;
+        } else if ((boardArr[2] == marker) && (boardArr[4] == marker) && (boardArr[6] == marker)) {
             console.log("Someone won at 2, 4 and 6");
+            ++gameStatus;
+        } else {
+            console.log("no one won");
         }
     }
     
-    return {placeMarker};
+    return {placeMarker, checkWinner};
+})();
+
+const gameFlow = (() => {
+    const {getMarker, addScore} = createUser();
+    
+    console.log("Start of game, player 1's turn");
+    const gameStatus = 0;
+    const currentPlayer = 1;
+    
+    const changePlayer = () => {
+        currentPlayer === 1 ? ++currentPlayer : --currentPlayer;
+    }
+
+    const checkStatus = () => {
+        if (gameStatus === 1) {
+            console.log(`Player ${currentPlayer} has won the game!`);
+        } else {
+            changePlayer();
+            console.log(`It is now Player ${currentPlayer}'s turn`);
+        }
+    }
+
+    const playRound = (item) => {
+        if (gameStatus === 1) return;
+
+        gameBoard.placeMarker(`player${currentPlayer}`.getMarker(), item);
+        gameBoard.checkWinner(`player${currentPlayer}`.getMarker());
+        checkStatus();
+    }
+
+    return {playRound};
 })();
