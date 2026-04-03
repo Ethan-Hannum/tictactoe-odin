@@ -1,6 +1,14 @@
 body {
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
+    font-size: 32px;
+
+}
+
+.message {
+    letter-spacing: 1.5px;
 }
 
 .board {
@@ -14,4 +22,18 @@ body {
 
 .square {
     border: 1px blue solid;
+}
+
+.scoreboard {
+    display: grid;
+    width: 50%;
+    grid-template-columns: 2fr 1fr 2fr;
+    text-align: center;
+}
+
+.player1,
+.player2 {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
 }
