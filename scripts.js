@@ -11,9 +11,16 @@ function createUser(xOrO, player) {
     return {getScore, addScore, getMarker, getName};
 };
 
+const player1 = createUser("X", "Nichsolson");
+const player2 = createUser("O", "Travis");
+
 const gameBoard = (() => {
     const boardArr = [null, null, null, null, null, null, null, null, null];
     console.log(boardArr);
+
+    const getBoard = (item) => {
+        boardArr;
+    }
 
     const placeMarker = (marker, item) => {
         boardArr[item] = `${marker}`;
@@ -51,12 +58,10 @@ const gameBoard = (() => {
         }
     }
     
-    return {placeMarker, checkWinner};
+    return {placeMarker, getBoard, checkWinner};
 })();
 
 const gameFlow = (() => {
-    const player1 = createUser("X", "Nichsolson");
-    const player2 = createUser("O", "Travis");
     console.log("Start of game, player 1's turn");
     let gameStatus = 0;
     let currentPlayer = player1;
@@ -66,6 +71,8 @@ const gameFlow = (() => {
          ? currentPlayer = player2 
          : currentPlayer = player1;
     }
+    
+    const getPlayer = () => {currentPlayer};
 
     const changeStatus = (score) => {
         gameStatus = score;
@@ -87,5 +94,25 @@ const gameFlow = (() => {
         }
     }
 
-    return {changeStatus, playRound};
+    return {changeStatus, getPlayer, playRound};
+})();
+
+const displayController = (() => {
+    const squares = document.querySelectorAll(".square");
+    squares.forEach((square, index) => {
+        console.log(square);
+        square.addEventListener("click", () => gameFlow.playRound(index));
+    });
+
+    const renderDisplay = (index) => {
+        const board = getBoard();
+        const player = getPlayer();
+        board.forEach((item, index) => {
+            if (item !== null) {
+                squares[index].textContent = player.getMarker();
+            }
+        })
+    }
+
+    return {renderDisplay}
 })();
