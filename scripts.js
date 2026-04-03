@@ -18,9 +18,7 @@ const gameBoard = (() => {
     const boardArr = [null, null, null, null, null, null, null, null, null];
     console.log(boardArr);
 
-    const getBoard = (item) => {
-        boardArr;
-    }
+    const getBoard = () => boardArr;
 
     const placeMarker = (marker, item) => {
         boardArr[item] = `${marker}`;
@@ -62,9 +60,9 @@ const gameBoard = (() => {
 })();
 
 const gameFlow = (() => {
-    console.log("Start of game, player 1's turn");
     let gameStatus = 0;
     let currentPlayer = player1;
+    console.log(`Start of game, ${currentPlayer.getName()}'s turn`);
     
     const changePlayer = () => {
         currentPlayer === player1
@@ -72,7 +70,7 @@ const gameFlow = (() => {
          : currentPlayer = player1;
     }
     
-    const getPlayer = () => {currentPlayer};
+    const getPlayer = () => currentPlayer;
 
     const changeStatus = (score) => {
         gameStatus = score;
@@ -83,6 +81,7 @@ const gameFlow = (() => {
         if (gameStatus === 1) return;
 
         gameBoard.placeMarker(currentPlayer.getMarker(), item);
+        displayController.renderDisplay(item);
         gameBoard.checkWinner(currentPlayer.getMarker());
         if (gameStatus === 1) {
             console.log(`${currentPlayer.getName()} has won the game!`);
@@ -99,20 +98,35 @@ const gameFlow = (() => {
 
 const displayController = (() => {
     const squares = document.querySelectorAll(".square");
-    squares.forEach((square, index) => {
-        console.log(square);
-        square.addEventListener("click", () => gameFlow.playRound(index));
-    });
 
-    const renderDisplay = (index) => {
-        const board = getBoard();
-        const player = getPlayer();
+    const addEvent = () => squares.forEach((square) => {
+        console.log(square);
+        square.squareStatus = 0;
+        square.addEventListener("click", clickEvent);
+    });
+    
+    const clickEvent = (event) => {
+        console.log(event.target.squareStatus);
+        if (event.target.squareStatus === 0) {
+            console.log("it 0")
+            gameFlow.playRound(event.target.dataset.item);
+            event.target.squareStatus = 1;
+        } else if (event.target.squareStatus === 1) {
+            console.log(`${event.target.dataset.item}... choose another square`)
+        }
+    }
+
+    const renderDisplay = () => {
+        const board = gameBoard.getBoard();
+        console.log(board);
         board.forEach((item, index) => {
             if (item !== null) {
-                squares[index].textContent = player.getMarker();
+                squares[index].textContent = board[index];
             }
         })
     }
+
+    addEvent();
 
     return {renderDisplay}
 })();
