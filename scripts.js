@@ -98,6 +98,8 @@ const gameFlow = (() => {
 
 const displayController = (() => {
     const squares = document.querySelectorAll(".square");
+    const p1Name = document.querySelector(".player1 > .name");
+    const p2Name = document.querySelector(".player2 > .name");
 
     const addEvent = () => squares.forEach((square) => {
         console.log(square);
@@ -124,6 +126,14 @@ const displayController = (() => {
                 squares[index].textContent = board[index];
             }
         })
+    }
+
+    const renderName = (player, who) => {
+        if (who === "p1") {
+            p1Name.textContent = player.name;   
+        } else if (who === "p2") {
+            p2Name.textContent = player.name;
+        }
     }
 
     addEvent();
