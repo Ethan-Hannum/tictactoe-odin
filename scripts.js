@@ -1,7 +1,7 @@
 function createUser(xOrO, player) {
     const marker = xOrO;
     let name = player;
-    const score = 0;
+    let score = 0;
 
     const getMarker = () => marker;
     const getName = () => name;
@@ -96,6 +96,7 @@ const gameFlow = (() => {
         if (gameStatus === 1) {
             console.log(`${currentPlayer.getName()} has won the game!`);
             currentPlayer.addScore();
+            displayController.renderScore();
         } else if (gameStatus === 2) {
             console.log("playRound: Tie game!")
         } else {
@@ -111,6 +112,8 @@ const displayController = (() => {
     const squares = document.querySelectorAll(".square");
     const p1Name = document.querySelector("#p1-info > .name");
     const p2Name = document.querySelector(".player2 > #p2-info > .name");
+    const p1Score = document.querySelector("#p1-info > .score");
+    const p2Score = document.querySelector("#p2-info > .score");
     const p1Btn = document.querySelector(".player1 > .set-name > button");
     p1Btn.addEventListener("click", () => renderName("X"));
     const p2Btn = document.querySelector(".player2 > .set-name > button");
@@ -189,7 +192,12 @@ const displayController = (() => {
         }
     }
 
+    const renderScore = () => {
+        p1Score.textContent = player1.getScore();
+        p2Score.textContent = player2.getScore();
+    }
+
     addEvent();
 
-    return {renderDisplay, renderName}
+    return {renderDisplay, renderName, renderScore}
 })();
