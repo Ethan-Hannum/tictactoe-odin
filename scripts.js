@@ -69,7 +69,7 @@ const gameBoard = (() => {
 const gameFlow = (() => {
     let gameStatus = 1;
     let currentPlayer = player1;
-    console.log(`Start of game, ${currentPlayer.getName()}'s turn`);
+    const message = document.querySelector(".message");
     
     const changePlayer = () => {
         currentPlayer === player1
@@ -80,7 +80,6 @@ const gameFlow = (() => {
     const getPlayer = () => currentPlayer;
 
     const changeStatus = (score) => {
-        console.log("status test")
         gameStatus = score;
         console.log(`Game status: ${gameStatus}`);
     }
@@ -94,14 +93,14 @@ const gameFlow = (() => {
         displayController.renderDisplay(item);
         gameBoard.checkWinner(currentPlayer.getMarker());
         if (gameStatus === 1) {
-            console.log(`${currentPlayer.getName()} has won the game!`);
+            message.textContent = `${currentPlayer.getName()} has won the game!`;
             currentPlayer.addScore();
             displayController.renderScore();
         } else if (gameStatus === 2) {
-            console.log("playRound: Tie game!")
+            message.textContent = "Tie game! Reset Game to play again!"
         } else {
             changePlayer();
-            console.log(`It is now ${currentPlayer.getName()}'s turn`);
+            message.textContent = `It is now ${currentPlayer.getName()}'s turn`;
         }
     }
 
@@ -109,6 +108,7 @@ const gameFlow = (() => {
 })();
 
 const displayController = (() => {
+    const message = document.querySelector(".message");
     const squares = document.querySelectorAll(".square");
     const p1Name = document.querySelector("#p1-info > .name");
     const p2Name = document.querySelector(".player2 > #p2-info > .name");
@@ -120,8 +120,6 @@ const displayController = (() => {
     p2Btn.addEventListener("click", () => renderName("O"));
     const gameBtn = document.querySelector("#game");
     gameBtn.addEventListener("click", () => gameEvent());
-
-    console.log(squares[1].textContent);
     
 
     const addEvent = () => squares.forEach((square) => {
@@ -134,15 +132,14 @@ const displayController = (() => {
         console.log(event.target.squareStatus);
         if (event.target.squareStatus === 0) {
             if (gameFlow.getStatus() === 1) {
-                console.log("start the game first!")
+                message.textContent = "Start the game first!"
                 return;
             } else {
-                console.log("it 0")
                 gameFlow.playRound(event.target.dataset.item);
                 event.target.squareStatus = 1;
             }
         } else if (event.target.squareStatus === 1) {
-            console.log(`${event.target.dataset.item}... choose another square`)
+            message.textContent = `Square already chosen... ${gameFlow.getPlayer().getName()} choose another square`;
         }
     }
 
@@ -160,6 +157,7 @@ const displayController = (() => {
                 gameBoard.replaceBoard();
                 gameFlow.changeStatus(0);
                 gameBtn.textContent = "Restart Game";
+                message.textContent = `Start of game, ${gameFlow.getPlayer().getName()}'s turn`;
                 break;     
         }
     }
