@@ -18,10 +18,14 @@ const player1 = createUser("X", "Player 1");
 const player2 = createUser("O", "Player 2");
 
 const gameBoard = (() => {
-    const boardArr = [null, null, null, null, null, null, null, null, null];
+    let boardArr = [null, null, null, null, null, null, null, null, null];
     console.log(boardArr);
 
     const getBoard = () => boardArr;
+
+    const replaceBoard = () => {
+        boardArr = [null, null, null, null, null, null, null, null, null];
+    }
 
     const placeMarker = (marker, item) => {
         boardArr[item] = `${marker}`;
@@ -59,11 +63,11 @@ const gameBoard = (() => {
         }
     }
     
-    return {placeMarker, getBoard, checkWinner};
+    return {placeMarker, getBoard, replaceBoard, checkWinner};
 })();
 
 const gameFlow = (() => {
-    let gameStatus = 0;
+    let gameStatus = 1;
     let currentPlayer = player1;
     console.log(`Start of game, ${currentPlayer.getName()}'s turn`);
     
@@ -76,9 +80,12 @@ const gameFlow = (() => {
     const getPlayer = () => currentPlayer;
 
     const changeStatus = (score) => {
+        console.log("status test")
         gameStatus = score;
         console.log(`Game status: ${gameStatus}`);
     }
+
+    const getStatus = () => gameStatus;
 
     const playRound = (item) => {
         if (gameStatus === 1) return;
@@ -88,6 +95,7 @@ const gameFlow = (() => {
         gameBoard.checkWinner(currentPlayer.getMarker());
         if (gameStatus === 1) {
             console.log(`${currentPlayer.getName()} has won the game!`);
+            currentPlayer.addScore();
         } else if (gameStatus === 2) {
             console.log("playRound: Tie game!")
         } else {
@@ -96,7 +104,7 @@ const gameFlow = (() => {
         }
     }
 
-    return {changeStatus, getPlayer, playRound};
+    return {changeStatus, getPlayer, playRound, getStatus};
 })();
 
 const displayController = (() => {
@@ -107,6 +115,10 @@ const displayController = (() => {
     p1Btn.addEventListener("click", () => renderName("X"));
     const p2Btn = document.querySelector(".player2 > .set-name > button");
     p2Btn.addEventListener("click", () => renderName("O"));
+    const gameBtn = document.querySelector("#game");
+    gameBtn.addEventListener("click", () => gameEvent());
+
+    console.log(squares[1].textContent);
     
 
     const addEvent = () => squares.forEach((square) => {
@@ -118,11 +130,34 @@ const displayController = (() => {
     const clickEvent = (event) => {
         console.log(event.target.squareStatus);
         if (event.target.squareStatus === 0) {
-            console.log("it 0")
-            gameFlow.playRound(event.target.dataset.item);
-            event.target.squareStatus = 1;
+            if (gameFlow.getStatus() === 1) {
+                console.log("start the game first!")
+                return;
+            } else {
+                console.log("it 0")
+                gameFlow.playRound(event.target.dataset.item);
+                event.target.squareStatus = 1;
+            }
         } else if (event.target.squareStatus === 1) {
             console.log(`${event.target.dataset.item}... choose another square`)
+        }
+    }
+
+    const gameEvent = () => {
+        console.log("event started")
+        switch (gameFlow.getStatus()) {
+            case 0:
+                console.log("status is 0");
+                break;
+            case 1:
+                squares.forEach((square) => {
+                    square.textContent = "";
+                    square.squareStatus = 0;
+                })
+                gameBoard.replaceBoard();
+                gameFlow.changeStatus(0);
+                gameBtn.textContent = "Restart Game";
+                break;     
         }
     }
 
