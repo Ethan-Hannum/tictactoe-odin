@@ -34,6 +34,13 @@ body {
 .player1,
 .player2 {
     display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#p1-info,
+#p2-info {
+    display: flex;
     justify-content: center;
     gap: 48px;
 }

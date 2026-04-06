@@ -98,8 +98,8 @@ const gameFlow = (() => {
 
 const displayController = (() => {
     const squares = document.querySelectorAll(".square");
-    const p1Name = document.querySelector(".player1 > .name");
-    const p2Name = document.querySelector(".player2 > .name");
+    const p1Name = document.querySelector(".player1 > .p1-info > .name");
+    const p2Name = document.querySelector(".player2 > .p2-info > .name");
 
     const addEvent = () => squares.forEach((square) => {
         console.log(square);
@@ -138,5 +138,5 @@ const displayController = (() => {
 
     addEvent();
 
-    return {renderDisplay}
+    return {renderDisplay, renderName}
 })();
