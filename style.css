@@ -4,11 +4,13 @@ body {
     justify-content: center;
     align-items: center;
     font-size: 32px;
-
+    background-color: darkgray;
+    font-family: Arial, sans-serif;
 }
 
 .message {
     letter-spacing: 1.5px;
+    margin-bottom: 12px;
 }
 
 .board {
@@ -22,6 +24,7 @@ body {
 
 .square {
     border: 1px blue solid;
+    background-color: lightgray;
 }
 
 .scoreboard {
@@ -29,6 +32,7 @@ body {
     width: 50%;
     grid-template-columns: 2fr 1fr 2fr;
     text-align: center;
+    margin-top: 12px;
 }
 
 .player1,
