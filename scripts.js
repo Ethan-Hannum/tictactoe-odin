@@ -1,18 +1,21 @@
 function createUser(xOrO, player) {
     const marker = xOrO;
-    const name = player;
+    let name = player;
     const score = 0;
 
     const getMarker = () => marker;
     const getName = () => name;
+    const changeName = (newName) => {
+        name = newName;
+    };
     const getScore = () => score;
     const addScore = () => { score++ };
 
-    return {getScore, addScore, getMarker, getName};
+    return {getScore, addScore, getMarker, getName, changeName};
 };
 
-const player1 = createUser("X", "Nichsolson");
-const player2 = createUser("O", "Travis");
+const player1 = createUser("X", "Player 1");
+const player2 = createUser("O", "Player 2");
 
 const gameBoard = (() => {
     const boardArr = [null, null, null, null, null, null, null, null, null];
@@ -98,8 +101,13 @@ const gameFlow = (() => {
 
 const displayController = (() => {
     const squares = document.querySelectorAll(".square");
-    const p1Name = document.querySelector(".player1 > .p1-info > .name");
-    const p2Name = document.querySelector(".player2 > .p2-info > .name");
+    const p1Name = document.querySelector("#p1-info > .name");
+    const p2Name = document.querySelector(".player2 > #p2-info > .name");
+    const p1Btn = document.querySelector(".player1 > .set-name > button");
+    p1Btn.addEventListener("click", () => renderName("X"));
+    const p2Btn = document.querySelector(".player2 > .set-name > button");
+    p2Btn.addEventListener("click", () => renderName("O"));
+    
 
     const addEvent = () => squares.forEach((square) => {
         console.log(square);
@@ -128,11 +136,21 @@ const displayController = (() => {
         })
     }
 
-    const renderName = (player, who) => {
-        if (who === "p1") {
-            p1Name.textContent = player.name;   
-        } else if (who === "p2") {
-            p2Name.textContent = player.name;
+    const renderName = (who) => {
+        if (who === "X") {
+            const input = document.querySelector("#p1-name");
+            const text = input.value;
+            player1.changeName(text);
+            p1Name.textContent = text;
+            p1Btn.remove();
+            input.remove();   
+        } else if (who === "O") {
+            const input = document.querySelector("#p2-name");
+            const text = input.value;
+            player2.changeName(text);
+            p2Name.textContent = text;
+            p2Btn.remove();
+            input.remove();   
         }
     }
 
