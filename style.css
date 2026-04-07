@@ -23,8 +23,13 @@ body {
 }
 
 .square {
+    display: flex;
     border: 1px blue solid;
     background-color: lightgray;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    
 }
 
 .scoreboard {
